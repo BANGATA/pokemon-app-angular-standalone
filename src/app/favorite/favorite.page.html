@@ -5,47 +5,20 @@
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-      <ion-title class="Title"> Pokemon App </ion-title>
+      <ion-title class="Title">Favorite</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content [fullscreen]="true">
     <ion-header collapse="condense">
       <ion-toolbar>
-        <ion-title size="large">Pokemon App</ion-title>
+        <ion-title size="large">Favorite</ion-title>
       </ion-toolbar>
     </ion-header>
     <div id="container">
-      <div class="records">
-        <ion-item>
-          <ion-input
-            [value]="search"
-            type="text"
-            (ionChange)="handleChangeSearch($event.detail.value!)"
-            placeholder="Enter pokemon name"
-          ></ion-input>
-          <ion-button (click)="handleSearchPokemon()">Search</ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            label="Filter by Type"
-            [value]="selectedType"
-            (ionChange)="onTypeChange($event.target.value)"
-          >
-            @for(type of allTypes; track type){
-            <ion-select-option value="all">All</ion-select-option>
-
-            <ion-select-option [value]="type">
-              {{ type.charAt(0).toUpperCase() + type.substr(1) }}
-            </ion-select-option>
-            }
-          </ion-select>
-        </ion-item>
-      </div>
-      @if(pokemons || filteredPokemons){
+      @if(pokemons){
       <div class="grid-container">
-        @for(pokemon of selectedType === 'all' ? pokemons : filteredPokemons;
-        track pokemon){
+        @for(pokemon of pokemons; track pokemon){
         <ion-card>
           <div class="header-container" (click)="openModal(pokemon)">
             <div class="header-rank"># {{ pokemon.id }}</div>
@@ -95,8 +68,13 @@
         </ion-card>
         }
       </div>
-      } @if(pokemons.length <= 0 && filteredPokemons.length <= 0){
-      <h1 class="error-message">No Pokémon Found!</h1>
+      } @if(pokemons.length <= 0){
+      <div class="go-home-container">
+        <h1 class="error-message">No Favorite Pokémon Found!</h1>
+        <ion-button href="/home" routerDirection="root">
+          Find Pokémons
+        </ion-button>
+      </div>
       }
 
       <ion-modal>
@@ -181,16 +159,6 @@
           </ion-content>
         </ng-template>
       </ion-modal>
-      @if(selectedType === 'all'){
-
-      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
-        <ion-infinite-scroll-content
-          loadingSpinner="bubbles"
-          loadingText="Loading more Pokémon..."
-        >
-        </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-      }
     </div>
   </ion-content>
 </div>
